@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\struct_class.cc" />
+    <ClCompile Include="src\wrapper_acfclass.cc" />
+    <ClCompile Include="src\wrapper_browser.cc" />
+    <ClCompile Include="src\wrapper_callback.cc" />
+    <ClCompile Include="src\wrapper_environment.cc" />
+    <ClCompile Include="src\wrapper_handler_interface.cc" />
+    <ClCompile Include="src\wrapper_network.cc" />
+    <ClCompile Include="src\wrapper_profile.cc" />
+    <ClCompile Include="src\wrapper_urlrequest.cc" />
+    <ClCompile Include="src\wrapper_utility.cc" />
+    <ClCompile Include="src\message_pump.cc" />
+    <ClCompile Include="src\wrapper_values.cc" />
+    <ClCompile Include="src\wrapper_websocket.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\struct_class.h" />
+    <ClInclude Include="src\wrapper_acfclass.h" />
+    <ClInclude Include="src\wrapper_handler_interface.h" />
+    <ClInclude Include="src\wrapper_types.h" />
+    <ClInclude Include="src\wrapper_urlrequest.h" />
+    <ClInclude Include="src\wrapper_utility.h" />
+    <ClInclude Include="src\message_pump.h" />
+    <ClInclude Include="src\wrapper_websocket.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ec\acframework.e" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1ea934a8-1e97-4806-956c-c105f1c671aa}</ProjectGuid>
+    <RootNamespace>bindingEPL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>eACF.Wrapper</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>libacf_Caller</TargetName>
+    <OutDir>$(ProjectDir)..\lab\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;BINDINGEPL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>..\..\cmake\;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996;4309</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>..\..\cmake\lib\x86\;..\..\cmake\out\build\x86-Release\libacf_dll_wrapper\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libacf.lib;libacf_dll_wrapper.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

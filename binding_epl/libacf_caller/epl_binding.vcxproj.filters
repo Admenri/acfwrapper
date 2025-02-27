@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\message_pump.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\struct_class.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_acfclass.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_browser.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_callback.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_environment.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_handler_interface.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_network.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_profile.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_utility.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_values.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_urlrequest.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wrapper_websocket.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\message_pump.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\struct_class.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wrapper_acfclass.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wrapper_handler_interface.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wrapper_types.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wrapper_utility.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wrapper_urlrequest.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wrapper_websocket.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{3664313a-0ae6-49fc-82bf-8376b71a1b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ec">
+      <UniqueIdentifier>{aa02f8b9-df43-45d3-b69b-99fc8695432c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ec\acframework.e">
+      <Filter>ec</Filter>
+    </None>
+  </ItemGroup>
+</Project>

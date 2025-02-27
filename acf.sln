@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35514.174 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eACF.Wrapper", "binding_epl\libacf_caller\epl_binding.vcxproj", "{1EA934A8-1E97-4806-956C-C105F1C671AA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACFSharp.Wrapper", "binding_csharp\ACFSharp.Wrapper\ACFSharp.Wrapper.vcxproj", "{83E6BA43-BFFB-4FB3-8401-FDFCB16ADE7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1EA934A8-1E97-4806-956C-C105F1C671AA}.Release|x86.ActiveCfg = Release|Win32
+		{1EA934A8-1E97-4806-956C-C105F1C671AA}.Release|x86.Build.0 = Release|Win32
+		{83E6BA43-BFFB-4FB3-8401-FDFCB16ADE7F}.Release|x86.ActiveCfg = Release|Win32
+		{83E6BA43-BFFB-4FB3-8401-FDFCB16ADE7F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1AA3B4F3-B321-4A04-8A83-F4EA380ECA33}
+	EndGlobalSection
+EndGlobal
