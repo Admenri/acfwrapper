@@ -5,7 +5,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=b677cf222e08ab0ecc86725950ecb2c4758676a0$
+// $hash=f5a18c34d2da4eec85bc80958ecb0f373f4fc846$
 //
 
 #ifndef ACF_INCLUDE_CAPI_ACF_BROWSER_CAPI_H_
@@ -390,6 +390,7 @@ typedef struct _acf_browser_handler_t {
   ///
   void(ACF_CALLBACK* on_console_message)(struct _acf_browser_handler_t* self,
                                          struct _acf_browser_t* browser,
+                                         struct _acf_frame_t* frame,
                                          int level,
                                          const acf_string_t* message,
                                          const acf_string_t* source,

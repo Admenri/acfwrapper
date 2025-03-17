@@ -92,6 +92,14 @@ class Window : public AcfBrowserHandler {
                           bool is_main_frame,
                           AcfRefPtr<AcfLoginDelegate> delegate) override;
 
+  void OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
+                        AcfRefPtr<AcfFrame> frame,
+                        int level,
+                        const AcfString& message,
+                        const AcfString& source,
+                        int line,
+                        const AcfString& trace) override;
+
   AcfRefPtr<AcfWebSocketClientHandler> CreateWebSocket(
       AcfRefPtr<AcfBrowser> browser,
       AcfString& target_url) override;

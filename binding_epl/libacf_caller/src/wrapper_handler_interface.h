@@ -22,7 +22,8 @@ class EnvironmentHandler : public AcfEnvironmentHandler {
                             bool success) override;
   AcfRefPtr<AcfResourceRequestHandler> GetResourceRequestHandler(
       AcfRefPtr<AcfProfile> profile,
-      int64 frame_id,
+      AcfRefPtr<AcfBrowser> browser,
+      AcfRefPtr<AcfFrame> frame,
       AcfRefPtr<AcfRequest> request,
       acf_url_loader_factory_type_t type,
       const AcfString& request_initiator,
@@ -42,7 +43,8 @@ class ResourceRequestHandler : public AcfResourceRequestHandler {
  public:
   ResourceRequestHandler(LPVOID callback,
                          AcfRefPtr<AcfProfile> profile,
-                         int64 frame_id);
+                         AcfRefPtr<AcfBrowser> browser,
+                         AcfRefPtr<AcfFrame> frame);
 
   AcfRefPtr<AcfResourceHandler> OnBeforeResourceLoad(
       AcfRefPtr<AcfRequest> request) override;
@@ -57,7 +59,8 @@ class ResourceRequestHandler : public AcfResourceRequestHandler {
  private:
   LPVOID callback_;
   AcfRefPtr<AcfProfile> profile_;
-  int64 frame_id_;
+  AcfRefPtr<AcfBrowser> browser_;
+  AcfRefPtr<AcfFrame> frame_;
 
   IMPLEMENT_REFCOUNTING(ResourceRequestHandler);
 };
@@ -117,6 +120,7 @@ class BrowserHandler : public AcfBrowserHandler {
                             int event_flags) override;
 
   void OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
+                        AcfRefPtr<AcfFrame> frame,
                         int level,
                         const AcfString& message,
                         const AcfString& source,

@@ -7,6 +7,8 @@
 extern DWORD acf_cpp_fntable_request[];
 extern DWORD acf_cpp_fntable_response[];
 extern DWORD acf_cpp_fntable_profile[];
+extern DWORD acf_cpp_fntable_browser[];
+extern DWORD acf_cpp_fntable_frame[];
 
 void responsecb_continue(ACFResourceResponseCallback* obj,
                          const void* buffer,
@@ -101,12 +103,14 @@ void AcfRequestResponseWrapper::Read(
 ACFResourceFilterHandler::ACFResourceFilterHandler(
     LPVOID callback,
     AcfRefPtr<AcfProfile> profile,
-    int64 frame_id,
+    AcfRefPtr<AcfBrowser> browser,
+    AcfRefPtr<AcfFrame> frame,
     AcfRefPtr<AcfRequest> request,
     AcfRefPtr<AcfResponse> response)
     : _rawcallback(callback),
       profile_(profile),
-      frame_id_(frame_id),
+      browser_(browser),
+      frame_(frame),
       request_(request),
       response_(response) {}
 
@@ -163,9 +167,11 @@ ACFResourceFilterHandler::FilterStatus ACFResourceFilterHandler::Filter(
 
         IMP_NEWECLASS(TempProfile, profile_.get(), eClass::m_pVfTable_Profile,
                       acf_cpp_fntable_profile);
-        int* pFID = (int*)&frame_id_;
-        int pFID_1 = *pFID;
-        int pFID_2 = *(pFID + 1);
+
+        IMP_NEWECLASS(TempBrowser, browser_.get(), eClass::m_pVfTable_Browser,
+                      acf_cpp_fntable_browser);
+        IMP_NEWECLASS(TempFrame, frame_.get(), eClass::m_pVfTable_Frame,
+                      acf_cpp_fntable_frame);
 
         IMP_NEWECLASS(TempFilter, filter.get(),
                       eClass::m_pVfTable_ResponseFilter,
@@ -178,6 +184,12 @@ ACFResourceFilterHandler::FilterStatus ACFResourceFilterHandler::Filter(
         request_->AddRef();
         response_->AddRef();
         filter->AddRef();
+
+        if (browser_)
+          browser_->AddRef();
+        if (frame_)
+          frame_->AddRef();
+
         __asm {
 					push ecx;
 					push ebx;
@@ -189,8 +201,8 @@ ACFResourceFilterHandler::FilterStatus ACFResourceFilterHandler::Filter(
 					push TempFilter;
 					push TempResponse;
 					push TempRequest;
-          push pFID_2;
-          push pFID_1;
+          push TempFrame;
+          push TempBrowser;
           push TempProfile;
 					push ecx;
 					call[edx + 0x18];
@@ -202,6 +214,11 @@ ACFResourceFilterHandler::FilterStatus ACFResourceFilterHandler::Filter(
         request_->Release();
         response_->Release();
         filter->Release();
+
+        if (browser_)
+          browser_->Release();
+        if (frame_)
+          frame_->Release();
       }
 
       _readEnded = true;

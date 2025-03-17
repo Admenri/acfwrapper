@@ -133,6 +133,21 @@ typedef struct _acf_profile_create_params_t {
   /// Enable local cookies storage encrypt value.
   ///
   int enable_encrypted_cookies;
+
+  ///
+  /// Ignore cert errors for current profile context.
+  ///
+  int ignore_certificate_errors;
+
+  ///
+  /// Network context params: host mapping.
+  ///
+  acf_string_t host_mapping_rules;
+
+  ///
+  /// Network context params: host resolver mapping.
+  ///
+  acf_string_t host_resolver_mapping_rules;
 } acf_profile_create_params_t;
 
 ///

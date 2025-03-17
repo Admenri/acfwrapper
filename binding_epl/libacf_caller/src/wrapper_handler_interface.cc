@@ -60,7 +60,8 @@ void EnvironmentHandler::OnProcessInitialized(AcfRefPtr<AcfEnvironment> env,
 AcfRefPtr<AcfResourceRequestHandler>
 EnvironmentHandler::GetResourceRequestHandler(
     AcfRefPtr<AcfProfile> profile,
-    int64 frame_id,
+    AcfRefPtr<AcfBrowser> browser,
+    AcfRefPtr<AcfFrame> frame,
     AcfRefPtr<AcfRequest> request,
     acf_url_loader_factory_type_t type,
     const AcfString& request_initiator,
@@ -72,13 +73,20 @@ EnvironmentHandler::GetResourceRequestHandler(
     profile->AddRef();
     request->AddRef();
 
+    if (browser)
+      browser->AddRef();
+    if (frame)
+      frame->AddRef();
+
+    IMP_NEWECLASS(TempBrowser, browser.get(), eClass::m_pVfTable_Browser,
+                  acf_cpp_fntable_browser);
+    IMP_NEWECLASS(TempFrame, frame.get(), eClass::m_pVfTable_Frame,
+                  acf_cpp_fntable_frame);
+
     IMP_NEWECLASS(TempProfile, profile.get(), eClass::m_pVfTable_Profile,
                   acf_cpp_fntable_profile);
     IMP_NEWECLASS(TempRequest, request.get(), eClass::m_pVfTable_Request,
                   acf_cpp_fntable_request);
-    int* pFID = (int*)&frame_id;
-    int pFID_1 = *pFID;
-    int pFID_2 = *(pFID + 1);
 
     LPSTR pinitiator = GetEString(request_initiator);
     LPVOID lpInitiator = &pinitiator;
@@ -97,8 +105,8 @@ EnvironmentHandler::GetResourceRequestHandler(
 			push lpInitiator;
 			push nType;
 			push TempRequest;
-			push pFID_2;
-			push pFID_1;
+			push TempFrame;
+			push TempBrowser;
 			push TempProfile;
 			push ecx;
 			call[edx + 0x0C];
@@ -108,11 +116,17 @@ EnvironmentHandler::GetResourceRequestHandler(
 			pop ebx;
 			pop ecx;
     }
+
+    if (browser) browser->Release();
+    if (frame)
+      frame->Release();
+
     profile->Release();
     request->Release();
   }
-  return bRetVal ? new ResourceRequestHandler(callback_, profile, frame_id)
-                 : nullptr;
+  return bRetVal
+             ? new ResourceRequestHandler(callback_, profile, browser, frame)
+             : nullptr;
 }
 
 void EnvironmentHandler::OnProcessNavigateRequest(AcfRefPtr<AcfProfile> profile,
@@ -154,8 +168,12 @@ void EnvironmentHandler::OnProcessNavigateRequest(AcfRefPtr<AcfProfile> profile,
 
 ResourceRequestHandler::ResourceRequestHandler(LPVOID callback,
                                                AcfRefPtr<AcfProfile> profile,
-                                               int64 frame_id)
-    : callback_(callback), profile_(profile), frame_id_(frame_id) {}
+                                               AcfRefPtr<AcfBrowser> browser,
+                                               AcfRefPtr<AcfFrame> frame)
+    : callback_(callback),
+      profile_(profile),
+      browser_(browser),
+      frame_(frame) {}
 
 AcfRefPtr<AcfResourceHandler> ResourceRequestHandler::OnBeforeResourceLoad(
     AcfRefPtr<AcfRequest> request) {
@@ -163,11 +181,19 @@ AcfRefPtr<AcfResourceHandler> ResourceRequestHandler::OnBeforeResourceLoad(
     LPVOID pClass = this->callback_;
     request->AddRef();
     profile_->AddRef();
+
+    if (browser_)
+      browser_->AddRef();
+    if (frame_)
+      frame_->AddRef();
+
     IMP_NEWECLASS(TempProfile, profile_.get(), eClass::m_pVfTable_Profile,
                   acf_cpp_fntable_profile);
-    int* pFID = (int*)&frame_id_;
-    int pFID_1 = *pFID;
-    int pFID_2 = *(pFID + 1);
+
+    IMP_NEWECLASS(TempBrowser, browser_.get(), eClass::m_pVfTable_Browser,
+                  acf_cpp_fntable_browser);
+    IMP_NEWECLASS(TempFrame, frame_.get(), eClass::m_pVfTable_Frame,
+                  acf_cpp_fntable_frame);
 
     IMP_NEWECLASS(TempRequest, request.get(), eClass::m_pVfTable_Request,
                   acf_cpp_fntable_request);
@@ -189,8 +215,8 @@ AcfRefPtr<AcfResourceHandler> ResourceRequestHandler::OnBeforeResourceLoad(
 			lea ecx, pClass;
 			push TempCallback;
 			push TempRequest;
-      push pFID_2;
-      push pFID_1;
+      push TempFrame;
+      push TempBrowser;
       push TempProfile;
 			push ecx;
 			call[edx + 0x10];
@@ -201,6 +227,11 @@ AcfRefPtr<AcfResourceHandler> ResourceRequestHandler::OnBeforeResourceLoad(
     }
     request->Release();
     profile_->Release();
+
+    if (browser_)
+      browser_->Release();
+    if (frame_)
+      frame_->Release();
 
     callback->Release();
     return callback->GetResponse();
@@ -219,11 +250,18 @@ AcfRefPtr<AcfResponseFilter> ResourceRequestHandler::OnResourceResponse(
     response->AddRef();
     profile_->AddRef();
 
+    if (browser_)
+      browser_->AddRef();
+    if (frame_)
+      frame_->AddRef();
+
     IMP_NEWECLASS(TempProfile, profile_.get(), eClass::m_pVfTable_Profile,
                   acf_cpp_fntable_profile);
-    int* pFID = (int*)&frame_id_;
-    int pFID_1 = *pFID;
-    int pFID_2 = *(pFID + 1);
+
+    IMP_NEWECLASS(TempBrowser, browser_.get(), eClass::m_pVfTable_Browser,
+                  acf_cpp_fntable_browser);
+    IMP_NEWECLASS(TempFrame, frame_.get(), eClass::m_pVfTable_Frame,
+                  acf_cpp_fntable_frame);
 
     IMP_NEWECLASS(TempRequest, request.get(), eClass::m_pVfTable_Request,
                   acf_cpp_fntable_request);
@@ -239,8 +277,8 @@ AcfRefPtr<AcfResponseFilter> ResourceRequestHandler::OnResourceResponse(
 			lea ecx, pClass;
 			push TempResponse;
 			push TempRequest;
-      push pFID_2;
-      push pFID_1;
+      push TempFrame;
+      push TempBrowser;
       push TempProfile;
 			push ecx;
 			call[edx + 0x14];
@@ -250,12 +288,18 @@ AcfRefPtr<AcfResponseFilter> ResourceRequestHandler::OnResourceResponse(
 			pop ebx;
 			pop ecx;
     }
+
     request->Release();
     response->Release();
     profile_->Release();
+
+    if (browser_)
+      browser_->Release();
+    if (frame_)
+      frame_->Release();
   }
-  return bRetVal ? new ACFResourceFilterHandler(callback_, profile_, frame_id_,
-                                                request, response)
+  return bRetVal ? new ACFResourceFilterHandler(callback_, profile_, browser_,
+                                                frame_, request, response)
                  : nullptr;
 }
 
@@ -268,11 +312,18 @@ void ResourceRequestHandler::OnResourceLoadComplete(
     request->AddRef();
     profile_->AddRef();
 
+    if (browser_)
+      browser_->AddRef();
+    if (frame_)
+      frame_->AddRef();
+
     IMP_NEWECLASS(TempProfile, profile_.get(), eClass::m_pVfTable_Profile,
                   acf_cpp_fntable_profile);
-    int* pFID = (int*)&frame_id_;
-    int pFID_1 = *pFID;
-    int pFID_2 = *(pFID + 1);
+
+    IMP_NEWECLASS(TempBrowser, browser_.get(), eClass::m_pVfTable_Browser,
+                  acf_cpp_fntable_browser);
+    IMP_NEWECLASS(TempFrame, frame_.get(), eClass::m_pVfTable_Frame,
+                  acf_cpp_fntable_frame);
 
     IMP_NEWECLASS(TempRequest, request.get(), eClass::m_pVfTable_Request,
                   acf_cpp_fntable_request);
@@ -292,8 +343,8 @@ void ResourceRequestHandler::OnResourceLoadComplete(
 			push pLEN_1;
 			push status;
 			push TempRequest;
-      push pFID_2;
-      push pFID_1;
+      push TempFrame;
+      push TempBrowser;
       push TempProfile;
 			push ecx;
 			call[edx + 0x1C];
@@ -302,8 +353,14 @@ void ResourceRequestHandler::OnResourceLoadComplete(
 			pop ebx;
 			pop ecx;
     }
+
     request->Release();
     profile_->Release();
+
+    if (browser_)
+      browser_->Release();
+    if (frame_)
+      frame_->Release();
   }
 }
 
@@ -636,6 +693,7 @@ void BrowserHandler::OnContextMenuExecute(
 }
 
 void BrowserHandler::OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
+                                      AcfRefPtr<AcfFrame> frame,
                                       int level,
                                       const AcfString& message,
                                       const AcfString& source,
@@ -646,6 +704,8 @@ void BrowserHandler::OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
     browser->AddRef();
     IMP_NEWECLASS(TempBrowser, browser.get(), eClass::m_pVfTable_Browser,
                   acf_cpp_fntable_browser);
+    IMP_NEWECLASS(TempFrame, frame.get(), eClass::m_pVfTable_Frame,
+                  acf_cpp_fntable_frame);
 
     LPCSTR pMsg = GetEString(message);
     LPVOID ppMsg = &pMsg;
@@ -669,6 +729,7 @@ void BrowserHandler::OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
 			push ppSrc;
 			push ppMsg;
 			push level;
+      push TempFrame;
 			push TempBrowser;
 			push ecx;
 			call[edx + 0x2C];

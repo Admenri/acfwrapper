@@ -151,7 +151,8 @@ class EnvTest : public AcfEnvironmentHandler {
 
   AcfRefPtr<AcfResourceRequestHandler> GetResourceRequestHandler(
       AcfRefPtr<AcfProfile> profile,
-      int64 frame_id,
+      AcfRefPtr<AcfBrowser> browser,
+      AcfRefPtr<AcfFrame> frame,
       AcfRefPtr<AcfRequest> request,
       acf_url_loader_factory_type_t type,
       const AcfString& request_initiator,

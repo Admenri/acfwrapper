@@ -745,20 +745,21 @@ BOOL ACF_CALLBACK frame_is_main(AcfFrame* obj) {
 
 class ExecJsCallback : public AcfExecuteJavascriptCallback {
  public:
-  ExecJsCallback(std::atomic<BOOL>* notify) : notify_(notify) {}
+  ExecJsCallback() : notify_(false) {}
   ~ExecJsCallback() {}
 
   AcfRefPtr<AcfValue> GetResult() { return result_; }
+  std::atomic<BOOL>* GetAtomic() { return &notify_; }
 
  protected:
   void OnExecuteResult(AcfRefPtr<AcfValue> value) override {
     result_ = value;
     if (notify_)
-      *notify_ = true;
+      notify_ = true;
   }
 
  private:
-  std::atomic<BOOL>* notify_;
+  std::atomic<BOOL> notify_;
   AcfRefPtr<AcfValue> result_;
 
   IMPLEMENT_REFCOUNTING(ExecJsCallback);
@@ -768,14 +769,15 @@ BOOL ACF_CALLBACK frame_execute_javascript(AcfFrame* obj,
                                            LPCSTR script,
                                            LPCSTR url,
                                            DWORD* retObj) {
-  std::unique_ptr<std::atomic<BOOL>> notify =
-      std::make_unique<std::atomic<BOOL>>(false);
-  AcfRefPtr<ExecJsCallback> lpHandler =
-      new ExecJsCallback(retObj ? notify.get() : nullptr);
+  AcfRefPtr<ExecJsCallback> lpHandler;
+
+  if (retObj)
+    lpHandler = new ExecJsCallback();
+
   obj->ExecuteJavascript(script, url, lpHandler);
 
   if (retObj) {
-    while (!*notify) {
+    while (!*lpHandler->GetAtomic()) {
       if (IsOnUIThread()) {
         MSG uiMsg;
         if (PeekMessage(&uiMsg, NULL, NULL, NULL, PM_REMOVE)) {
@@ -783,20 +785,21 @@ BOOL ACF_CALLBACK frame_execute_javascript(AcfFrame* obj,
           DispatchMessage(&uiMsg);
         }
       } else {
-        ::Sleep(1);
+        ::Sleep(10);
       }
     }
 
     AcfRefPtr<AcfValue> value = lpHandler->GetResult();
-
-    if (value) {
+    if (retObj && value) {
       value->AddRef();
       retObj[1] = (DWORD)value.get();
       retObj[2] = (DWORD)acf_cpp_fntable_value;
     }
+
+    return !!value.get();
   }
 
-  return !!lpHandler->GetResult().get();
+  return TRUE;
 }
 
 class ExecJsCallbackAsync : public AcfExecuteJavascriptCallback {

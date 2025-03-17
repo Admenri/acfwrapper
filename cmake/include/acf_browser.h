@@ -352,8 +352,9 @@ class AcfBrowserHandler : public virtual AcfBaseRefCounted {
   ///
   /// Called to display a console message.
   ///
-  /*--acf(optional_param=message,optional_param=source,optional_param=trace)--*/
+  /*--acf(optional_param=frame,optional_param=message,optional_param=source,optional_param=trace)--*/
   virtual void OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
+                                AcfRefPtr<AcfFrame> frame,
                                 int level,
                                 const AcfString& message,
                                 const AcfString& source,

@@ -7,7 +7,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=3cf9afeb0d5a5ec70792085a46d66a6defc75100$
+// $hash=b645b2339165e6fe0994524b259403ff58f01c0d$
 //
 
 #include "libacf_dll/cpptoc/browser_handler_cpptoc.h"
@@ -487,6 +487,7 @@ browser_handler_on_before_navigation(struct _acf_browser_handler_t* self,
 void ACF_CALLBACK
 browser_handler_on_console_message(struct _acf_browser_handler_t* self,
                                    struct _acf_browser_t* browser,
+                                   struct _acf_frame_t* frame,
                                    int level,
                                    const acf_string_t* message,
                                    const acf_string_t* source,
@@ -501,12 +502,12 @@ browser_handler_on_console_message(struct _acf_browser_handler_t* self,
   if (!browser) {
     return;
   }
-  // Unverified params: message, source, trace
+  // Unverified params: frame, message, source, trace
 
   // Execute
   AcfBrowserHandlerCppToC::Get(self)->OnConsoleMessage(
-      AcfBrowserCToCpp::Wrap(browser), level, AcfString(message),
-      AcfString(source), line, AcfString(trace));
+      AcfBrowserCToCpp::Wrap(browser), AcfFrameCToCpp::Wrap(frame), level,
+      AcfString(message), AcfString(source), line, AcfString(trace));
 }
 
 void ACF_CALLBACK

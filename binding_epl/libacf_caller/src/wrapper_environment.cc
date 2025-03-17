@@ -143,6 +143,9 @@ BOOL ACF_CALLBACK create_profile(AcfEnvironment* obj,
                                  BOOL persist_session,
                                  BOOL restore_old_cookie,
                                  BOOL enable_encrypt_cookie,
+                                 BOOL ignore_certificate_errors,
+                                 LPCSTR host_mapping,
+                                 LPCSTR host_resolver_mapping,
                                  DWORD* retObj) {
   AcfProfileCreateParams settings;
   AcfString(&settings.storage_path).FromString(path);
@@ -150,6 +153,9 @@ BOOL ACF_CALLBACK create_profile(AcfEnvironment* obj,
   settings.persist_session_cookies = persist_session;
   settings.restore_old_session_cookies = restore_old_cookie;
   settings.enable_encrypted_cookies = enable_encrypt_cookie;
+  settings.ignore_certificate_errors = enable_encrypt_cookie;
+  AcfString(&settings.host_mapping_rules) = host_mapping;
+  AcfString(&settings.host_resolver_mapping_rules) = host_resolver_mapping;
   AcfRefPtr<AcfProfile> profile = obj->CreateProfile(settings, nullptr);
 
   // Wait for thread synchronize

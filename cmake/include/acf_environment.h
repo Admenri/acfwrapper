@@ -30,6 +30,7 @@ class AcfBrowserHandler;
 class AcfCompleteHandler;
 class AcfResourceRequestHandler;
 class AcfRequest;
+class AcfFrame;
 
 ///
 /// Get Ex functions activated state.
@@ -57,10 +58,11 @@ class AcfEnvironmentHandler : public virtual AcfBaseRefCounted {
   /// Raise that |frame_id| maybe nullptr when request is sent from service
   /// worker. |frame_id| can be matched with AcfFrame::GetIdentifier().
   ///
-  /*--acf(optional_param=profile,optional_param=request_initiator)--*/
+  /*--acf(optional_param=profile,optional_param=browser,optional_param=frame,optional_param=request_initiator)--*/
   virtual AcfRefPtr<AcfResourceRequestHandler> GetResourceRequestHandler(
       AcfRefPtr<AcfProfile> profile,
-      int64 frame_id,
+      AcfRefPtr<AcfBrowser> browser,
+      AcfRefPtr<AcfFrame> frame,
       AcfRefPtr<AcfRequest> request,
       acf_url_loader_factory_type_t type,
       const AcfString& request_initiator,

@@ -71,7 +71,8 @@ class ACFResourceFilterHandler : public AcfResponseFilter {
  public:
   ACFResourceFilterHandler(LPVOID callback,
                            AcfRefPtr<AcfProfile> profile,
-                           int64 frame_id,
+                           AcfRefPtr<AcfBrowser> browser,
+                           AcfRefPtr<AcfFrame> frame,
                            AcfRefPtr<AcfRequest> request,
                            AcfRefPtr<AcfResponse> response);
   ~ACFResourceFilterHandler();
@@ -84,7 +85,8 @@ class ACFResourceFilterHandler : public AcfResponseFilter {
   LPVOID _rawcallback;
 
   AcfRefPtr<AcfProfile> profile_;
-  int64 frame_id_;
+  AcfRefPtr<AcfBrowser> browser_;
+  AcfRefPtr<AcfFrame> frame_;
 
   AcfRefPtr<AcfRequest> request_;
   AcfRefPtr<AcfResponse> response_;

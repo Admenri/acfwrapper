@@ -7,13 +7,15 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=f22d4a3fae7f66ed8aec0159d579853ea88a2192$
+// $hash=0757bd04c51a269d484e621d72081252fc2e4464$
 //
 
 #include "libacf_dll/cpptoc/environment_handler_cpptoc.h"
 
 #include "libacf_dll/cpptoc/resource_request_handler_cpptoc.h"
+#include "libacf_dll/ctocpp/browser_ctocpp.h"
 #include "libacf_dll/ctocpp/environment_ctocpp.h"
+#include "libacf_dll/ctocpp/frame_ctocpp.h"
 #include "libacf_dll/ctocpp/profile_ctocpp.h"
 #include "libacf_dll/ctocpp/request_ctocpp.h"
 
@@ -44,7 +46,8 @@ struct _acf_resource_request_handler_t* ACF_CALLBACK
 environment_handler_get_resource_request_handler(
     struct _acf_environment_handler_t* self,
     struct _acf_profile_t* profile,
-    int64 frame_id,
+    acf_browser_t* browser,
+    struct _acf_frame_t* frame,
     struct _acf_request_t* request,
     acf_url_loader_factory_type_t type,
     const acf_string_t* request_initiator,
@@ -62,7 +65,7 @@ environment_handler_get_resource_request_handler(
   if (!block_request) {
     return NULL;
   }
-  // Unverified params: profile, request_initiator
+  // Unverified params: profile, browser, frame, request_initiator
 
   // Translate param: block_request; type: bool_byref
   bool block_requestBool = (block_request && *block_request) ? true : false;
@@ -70,9 +73,9 @@ environment_handler_get_resource_request_handler(
   // Execute
   AcfRefPtr<AcfResourceRequestHandler> _retval =
       AcfEnvironmentHandlerCppToC::Get(self)->GetResourceRequestHandler(
-          AcfProfileCToCpp::Wrap(profile), frame_id,
-          AcfRequestCToCpp::Wrap(request), type, AcfString(request_initiator),
-          block_requestBool);
+          AcfProfileCToCpp::Wrap(profile), AcfBrowserCToCpp::Wrap(browser),
+          AcfFrameCToCpp::Wrap(frame), AcfRequestCToCpp::Wrap(request), type,
+          AcfString(request_initiator), block_requestBool);
 
   // Restore param: block_request; type: bool_byref
   if (block_request) {

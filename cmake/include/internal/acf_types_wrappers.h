@@ -292,10 +292,13 @@ struct AcfProfileCreateParamsTraits {
     s->restore_old_session_cookies = false;
     s->persist_session_cookies = false;
     s->enable_encrypted_cookies = true;
+    s->ignore_certificate_errors = false;
   }
 
   static inline void clear(struct_type* s) {
     acf_string_clear(&s->storage_path);
+    acf_string_clear(&s->host_mapping_rules);
+    acf_string_clear(&s->host_resolver_mapping_rules);
   }
 
   static inline void set(const struct_type* src,
@@ -307,6 +310,12 @@ struct AcfProfileCreateParamsTraits {
     target->restore_old_session_cookies = src->restore_old_session_cookies;
     target->persist_session_cookies = src->persist_session_cookies;
     target->enable_encrypted_cookies = src->enable_encrypted_cookies;
+    target->ignore_certificate_errors = src->ignore_certificate_errors;
+    acf_string_set(src->host_mapping_rules.str, src->host_mapping_rules.length,
+                   &target->host_mapping_rules, copy);
+    acf_string_set(src->host_resolver_mapping_rules.str,
+                   src->host_resolver_mapping_rules.length,
+                   &target->host_resolver_mapping_rules, copy);
   }
 };
 using AcfProfileCreateParams = AcfStructBase<AcfProfileCreateParamsTraits>;

@@ -5,7 +5,7 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
-// $hash=f8923747c87eddd27dadf331fe7b56b7ba95e323$
+// $hash=2654985b3297ac0f4ed5f4105f5980e51a2092c2$
 //
 
 #ifndef ACF_INCLUDE_CAPI_ACF_ENVIRONMENT_CAPI_H_
@@ -34,6 +34,7 @@ struct _acf_browser_t;
 struct _acf_complete_handler_t;
 struct _acf_environment_handler_t;
 struct _acf_environment_t;
+struct _acf_frame_t;
 struct _acf_profile_t;
 struct _acf_request_t;
 struct _acf_resource_request_handler_t;
@@ -66,7 +67,8 @@ typedef struct _acf_environment_handler_t {
       ACF_CALLBACK* get_resource_request_handler)(
       struct _acf_environment_handler_t* self,
       struct _acf_profile_t* profile,
-      int64 frame_id,
+      struct _acf_browser_t* browser,
+      struct _acf_frame_t* frame,
       struct _acf_request_t* request,
       acf_url_loader_factory_type_t type,
       const acf_string_t* request_initiator,

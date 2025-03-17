@@ -7,7 +7,7 @@
 // implementations. See the translator.README.txt file in the tools directory
 // for more information.
 //
-// $hash=5b7ecf8427f30b28aa57d03934717cae3b95e8b6$
+// $hash=8053e8881dfa45c6a53877ae5bee79746ae96fc8$
 //
 
 #ifndef ACF_CPPTOC_ENVIRONMENT_HANDLER_CPPTOC_H_
@@ -17,12 +17,14 @@
 #include "include/acf_browser.h"
 #include "include/acf_callback.h"
 #include "include/acf_environment.h"
+#include "include/acf_frame.h"
 #include "include/acf_profile.h"
 #include "include/acf_request.h"
 #include "include/acf_resource_request_handler.h"
 #include "include/capi/acf_browser_capi.h"
 #include "include/capi/acf_callback_capi.h"
 #include "include/capi/acf_environment_capi.h"
+#include "include/capi/acf_frame_capi.h"
 #include "include/capi/acf_profile_capi.h"
 #include "include/capi/acf_request_capi.h"
 #include "include/capi/acf_resource_request_handler_capi.h"

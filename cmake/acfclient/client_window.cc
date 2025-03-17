@@ -919,6 +919,16 @@ void Window::OnAuthLoginRequest(AcfRefPtr<AcfBrowser> browser,
   std::cout << __FUNCTION__ << '\n';
 }
 
+void Window::OnConsoleMessage(AcfRefPtr<AcfBrowser> browser,
+                              AcfRefPtr<AcfFrame> frame,
+                              int level,
+                              const AcfString& message,
+                              const AcfString& source,
+                              int line,
+                              const AcfString& trace) {
+  std::cout << message.ToString() << '\n';
+}
+
 AcfRefPtr<AcfWebSocketClientHandler> Window::CreateWebSocket(
     AcfRefPtr<AcfBrowser> browser,
     AcfString& target_url) {
