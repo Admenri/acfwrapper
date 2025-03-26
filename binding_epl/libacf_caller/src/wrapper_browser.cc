@@ -527,8 +527,10 @@ void ACF_CALLBACK zoom_page(AcfBrowser* obj, acf_zoom_type_t type) {
   obj->ZoomPage(type);
 }
 
-void ACF_CALLBACK add_document_script(AcfBrowser* obj, LPCSTR script) {
-  obj->AddDocumentStartJavaScript(script, {"*"});
+int ACF_CALLBACK add_document_script(AcfBrowser* obj,
+                                     LPCSTR script,
+                                     LPCSTR match) {
+  return obj->AddDocumentStartJavaScript(script, {match});
 }
 
 void ACF_CALLBACK add_webmessage_factory(AcfBrowser* obj,
@@ -619,6 +621,10 @@ void ACF_CALLBACK add_register_function_factory(AcfBrowser* obj,
       {"*"});
 }
 
+void ACF_CALLBACK remove_document_script(AcfBrowser* obj, int script_id) {
+  obj->RemoveDocumentStartJavaScript(script_id);
+}
+
 /// <summary>
 /// New Window Delagate
 /// </summary>
@@ -689,6 +695,7 @@ DWORD acf_cpp_fntable_browser[] = {
     (DWORD)get_favicon,
     (DWORD)resume_loading_browser,
     (DWORD)add_register_function_factory,
+    (DWORD)remove_document_script,
 };
 
 DWORD acf_cpp_fntable_new_window_delegate[] = {
@@ -749,13 +756,12 @@ class ExecJsCallback : public AcfExecuteJavascriptCallback {
   ~ExecJsCallback() {}
 
   AcfRefPtr<AcfValue> GetResult() { return result_; }
-  std::atomic<BOOL>* GetAtomic() { return &notify_; }
+  std::atomic<BOOL>& GetAtomic() { return notify_; }
 
  protected:
   void OnExecuteResult(AcfRefPtr<AcfValue> value) override {
     result_ = value;
-    if (notify_)
-      notify_ = true;
+    notify_ = true;
   }
 
  private:
@@ -769,15 +775,14 @@ BOOL ACF_CALLBACK frame_execute_javascript(AcfFrame* obj,
                                            LPCSTR script,
                                            LPCSTR url,
                                            DWORD* retObj) {
-  AcfRefPtr<ExecJsCallback> lpHandler;
-
+  AcfRefPtr<ExecJsCallback> lpHandler = nullptr;
   if (retObj)
     lpHandler = new ExecJsCallback();
 
   obj->ExecuteJavascript(script, url, lpHandler);
 
-  if (retObj) {
-    while (!*lpHandler->GetAtomic()) {
+  if (lpHandler) {
+    while (!lpHandler->GetAtomic()) {
       if (IsOnUIThread()) {
         MSG uiMsg;
         if (PeekMessage(&uiMsg, NULL, NULL, NULL, PM_REMOVE)) {
@@ -790,7 +795,7 @@ BOOL ACF_CALLBACK frame_execute_javascript(AcfFrame* obj,
     }
 
     AcfRefPtr<AcfValue> value = lpHandler->GetResult();
-    if (retObj && value) {
+    if (value) {
       value->AddRef();
       retObj[1] = (DWORD)value.get();
       retObj[2] = (DWORD)acf_cpp_fntable_value;
